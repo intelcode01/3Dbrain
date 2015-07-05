@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 2.8)
+
+
+PROJECT(Midterm)
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+
+FIND_PACKAGE(ITK REQUIRED)
+IF(ITK_FOUND)
+	INCLUDE(${ITK_USE_FILE})
+ELSE(ITK_FOUND)
+	MESSAGE(FATAL_ERROR"ITK not found. Please set ITK_DIR.")
+ENDIF(ITK_FOUND)
+
+
+
+FOREACH(exf  MetaImageReader mha2nii  ReadSTL SkullStripping VTKMarchingCubes )
+  ADD_EXECUTABLE(${exf} ${exf}.cxx)
+  INSTALL_TARGETS(/bin ${exf})
+  INSTALL_TARGETS(/bin ${exf})
+  TARGET_LINK_LIBRARIES(${exf} ${ITK_LIBRARIES})
+  TARGET_LINK_LIBRARIES(${exf} ${VTK_LIBRARIES})
+  
+ENDFOREACH(exf)
+
+FOREACH(exe BiasCorrector BiasFieldEstimator BiasImageGenerator ImageCorrector InterSliceIntensityCorrector)
+  ADD_EXECUTABLE(${exe} ${exe}.cxx OptionList.cxx)
+  INSTALL_TARGETS(/bin ${exe})
+  INSTALL_TARGETS(/bin ${exe})
+  TARGET_LINK_LIBRARIES(${exe} ${ITK_LIBRARIES})
+ENDFOREACH(exe)
+
+
